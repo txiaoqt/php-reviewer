@@ -7,7 +7,17 @@ export function ProgressProvider({ children }) {
   // Load progress from LocalStorage or default to initialModules
   const [modules, setModules] = useState(() => {
     const saved = localStorage.getItem('codefill_progress');
-    return saved ? JSON.parse(saved) : initialModules;
+    // Force reload new modules if the structure has changed (check if we have exactly 2 modules now)
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // If we have more than 2 modules or the second module isn't "identification-terms", reload from file
+      if (parsed.length !== 2 || parsed[1]?.id !== 'identification-terms') {
+        console.log('Module structure changed, reloading from file');
+        return initialModules;
+      }
+      return parsed;
+    }
+    return initialModules;
   });
 
   // Track current question index for each module
