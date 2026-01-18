@@ -19,7 +19,7 @@ export const modules = [
     level: 'Intermediate',
     totalLevels: 11,
     completedLevels: 0,
-    isLocked: true,
+    isLocked: false,
     color: 'bg-accent',
     path: '/identification/chapters'
   }
