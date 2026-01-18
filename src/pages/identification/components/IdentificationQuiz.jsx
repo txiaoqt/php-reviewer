@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useProgress } from '../../../context/ProgressContext';
 import { getQuestionsForChapter } from '../../../data/identificationQuestions';
 import ProgressHeader from '../../../components/navigation/ProgressHeader';
@@ -9,17 +9,13 @@ import Icon from '../../../components/AppIcon';
 const IdentificationQuiz = () => {
   const { chapterId } = useParams();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const mode = searchParams.get('mode') || 'recognition'; // Default to recognition mode
 
   const { recordAnswer, getModuleProgress } = useProgress();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState({});
-  const [usedWords, setUsedWords] = useState([]);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [showWordBank, setShowWordBank] = useState(false);
-  const [selectedBlank, setSelectedBlank] = useState(null);
 
   // Get questions for this chapter
   const chapterQuestions = useMemo(() => {
@@ -31,113 +27,24 @@ const IdentificationQuiz = () => {
   // Initialize user answers when question changes
   useEffect(() => {
     if (currentQuestion) {
-      const initialAnswers = {};
-      currentQuestion.blanks.forEach(blank => {
-        initialAnswers[blank.id] = '';
-      });
-      setUserAnswers(initialAnswers);
-      setUsedWords([]);
+      setUserAnswers({});
       setShowFeedback(false);
-      setSelectedBlank(null);
     }
   }, [currentQuestion]);
 
-  // Calculate available words for word bank
-  const availableWords = useMemo(() => {
-    if (!currentQuestion) return [];
-
-    const allCorrectAnswers = currentQuestion.blanks.map(blank => blank.correctAnswer);
-    return allCorrectAnswers.filter(word => !usedWords.includes(word));
-  }, [currentQuestion, usedWords]);
-
-  // Parse context text and replace [1], [2], etc. with blanks
-  const renderContextText = () => {
-    if (!currentQuestion) return null;
-
-    const parts = currentQuestion.context.split(/(\[\d+\])/);
-
-    return parts.map((part, index) => {
-      const blankMatch = part.match(/\[(\d+)\]/);
-      if (blankMatch) {
-        const blankNumber = parseInt(blankMatch[1]);
-        const blank = currentQuestion.blanks.find(b => b.id === `blank-${blankNumber}`);
-        const userAnswer = userAnswers[blank?.id] || '';
-        const isSelected = selectedBlank === blank?.id;
-
-        return (
-          <span
-            key={index}
-            className={`
-              inline-block mx-1 px-2 py-1 rounded border-2 cursor-pointer transition-all
-              ${isSelected
-                ? 'border-blue-500 bg-blue-500/10'
-                : userAnswer
-                  ? 'border-green-500 bg-green-500/10'
-                  : 'border-gray-600 bg-gray-800 hover:border-gray-500'
-              }
-            `}
-            onClick={() => handleBlankClick(blank?.id)}
-          >
-            {userAnswer || `[${blankNumber}]`}
-          </span>
-        );
-      }
-      return <span key={index}>{part}</span>;
-    });
-  };
-
-  const handleBlankClick = (blankId) => {
-    if (mode === 'recognition') {
-      setSelectedBlank(blankId);
-      setShowWordBank(true);
-    }
-    // In recall mode, blanks are not clickable - users type directly
-  };
-
   const handleWordSelect = (word) => {
-    if (!selectedBlank) return;
-
-    // Update the answer for this blank
-    setUserAnswers(prev => ({
-      ...prev,
-      [selectedBlank]: word
-    }));
-
-    // Add word to used words
-    setUsedWords(prev => [...prev, word]);
-
-    // Close word bank
+    setUserAnswers({ answer: word });
     setShowWordBank(false);
-    setSelectedBlank(null);
-  };
-
-  const handleRecallInput = (blankId, value) => {
-    setUserAnswers(prev => ({
-      ...prev,
-      [blankId]: value
-    }));
   };
 
   const handleSubmit = () => {
-    if (!currentQuestion) return;
+    if (!currentQuestion || !userAnswers.answer) return;
 
-    // Check if all blanks are filled
-    const allFilled = currentQuestion.blanks.every(blank => userAnswers[blank.id]?.trim());
-
-    if (!allFilled) {
-      alert('Please fill in all blanks before submitting.');
-      return;
-    }
-
-    // Validate answers
-    const correct = currentQuestion.blanks.every(blank =>
-      userAnswers[blank.id]?.trim().toLowerCase() === blank.correctAnswer.toLowerCase()
-    );
-
+    const correct = userAnswers.answer.toLowerCase() === currentQuestion.correctAnswer.toLowerCase();
     setIsCorrect(correct);
     setShowFeedback(true);
 
-    // Record the answer in progress context
+    // Record the answer in session stats
     recordAnswer('identification-terms', correct);
   };
 
@@ -151,15 +58,8 @@ const IdentificationQuiz = () => {
   };
 
   const handleRetry = () => {
-    // Reset answers and used words
-    const resetAnswers = {};
-    currentQuestion.blanks.forEach(blank => {
-      resetAnswers[blank.id] = '';
-    });
-    setUserAnswers(resetAnswers);
-    setUsedWords([]);
+    setUserAnswers({});
     setShowFeedback(false);
-    setSelectedBlank(null);
   };
 
   if (!currentQuestion) {
@@ -197,7 +97,7 @@ const IdentificationQuiz = () => {
             <div className="flex items-center gap-2 mb-4">
               <Icon name="Brain" size={28} color="#0EA5E9" />
               <h1 className="text-3xl md:text-4xl font-bold text-slate-100">
-                {currentQuestion.title}
+                Software Engineering Fundamentals
               </h1>
             </div>
             <p className="text-lg text-slate-400">
@@ -207,53 +107,44 @@ const IdentificationQuiz = () => {
 
           {/* Context Text */}
           <div className="bg-slate-800 rounded-lg p-6 mb-6 border border-slate-700">
-            <div className="text-lg leading-relaxed text-slate-200">
-              {mode === 'recall' ? (
-                // Recall mode: Render text with input fields
-                currentQuestion.context.split(/(\[\d+\])/).map((part, index) => {
-                  const blankMatch = part.match(/\[(\d+)\]/);
-                  if (blankMatch) {
-                    const blankNumber = parseInt(blankMatch[1]);
-                    const blank = currentQuestion.blanks.find(b => b.id === `blank-${blankNumber}`);
+            <div className="text-lg leading-relaxed text-slate-200 mb-6">
+              {currentQuestion.context}
+            </div>
 
-                    return (
-                      <input
-                        key={index}
-                        type="text"
-                        value={userAnswers[blank?.id] || ''}
-                        onChange={(e) => handleRecallInput(blank?.id, e.target.value)}
-                        className="inline-block mx-1 px-2 py-1 w-32 bg-slate-700 border border-slate-600 rounded text-slate-200 text-center focus:border-blue-500 focus:outline-none"
-                        placeholder={`[${blankNumber}]`}
-                      />
-                    );
-                  }
-                  return <span key={index}>{part}</span>;
-                })
-              ) : (
-                // Recognition mode: Render text with clickable blanks
-                renderContextText()
-              )}
+            {/* Answer Blank Button */}
+            <div className="flex justify-center">
+              <button
+                onClick={() => setShowWordBank(true)}
+                className="px-6 py-4 bg-slate-700 hover:bg-slate-600 border-2 border-slate-600 rounded-lg text-slate-200 text-xl font-mono transition-all hover:border-blue-500 hover:bg-blue-500/10"
+                disabled={showFeedback}
+              >
+                {userAnswers.answer || '[ Tap to Select Term ]'}
+              </button>
             </div>
           </div>
 
-          {/* Word Bank (Recognition Mode Only) */}
-          {mode === 'recognition' && (
+          {/* Word Bank Display */}
+          {currentQuestion.wordBank && (
             <div className="bg-slate-800 rounded-lg p-6 mb-6 border border-slate-700">
-              <h3 className="text-lg font-semibold text-slate-100 mb-4">Available Words</h3>
+              <h3 className="text-lg font-semibold text-slate-100 mb-4">Available Terms</h3>
               <div className="flex flex-wrap gap-2">
-                {availableWords.map((word, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleWordSelect(word)}
-                    className="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded border border-slate-600 transition-colors"
-                    disabled={!selectedBlank}
-                  >
-                    {word}
-                  </button>
-                ))}
-                {availableWords.length === 0 && (
-                  <p className="text-slate-500 italic">All words have been used</p>
-                )}
+                {currentQuestion.wordBank.map((word, index) => {
+                  const isUsed = userAnswers.answer === word;
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => !isUsed && handleWordSelect(word)}
+                      className={`px-3 py-2 rounded border transition-colors ${
+                        isUsed
+                          ? 'bg-green-600 border-green-600 text-white cursor-not-allowed'
+                          : 'bg-slate-700 hover:bg-slate-600 text-slate-200 border-slate-600 hover:border-slate-500'
+                      }`}
+                      disabled={isUsed || showFeedback}
+                    >
+                      {word}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -276,13 +167,16 @@ const IdentificationQuiz = () => {
                 </h3>
               </div>
               <p className="text-sm mb-4">{currentQuestion.explanation}</p>
+              <div className="text-sm text-slate-400 mb-4">
+                <strong>Correct Answer:</strong> {currentQuestion.correctAnswer}
+              </div>
 
               <div className="flex gap-4">
                 <Button
                   onClick={handleNext}
                   className={isCorrect ? 'bg-green-600 hover:bg-green-700' : 'bg-slate-600 hover:bg-slate-700'}
                 >
-                  {currentQuestionIndex < chapterQuestions.length - 1 ? 'Next Question' : 'Finish Chapter'}
+                  {currentQuestionIndex < chapterQuestions.length - 1 ? 'Next Question' : 'Complete Chapter'}
                 </Button>
                 {!isCorrect && (
                   <Button
@@ -298,7 +192,7 @@ const IdentificationQuiz = () => {
           )}
 
           {/* Submit Button */}
-          {!showFeedback && (
+          {!showFeedback && userAnswers.answer && (
             <div className="flex justify-center">
               <Button
                 onClick={handleSubmit}
@@ -311,21 +205,32 @@ const IdentificationQuiz = () => {
         </div>
       </main>
 
-      {/* Word Bank Modal (Recognition Mode) */}
-      {showWordBank && mode === 'recognition' && (
+      {/* Word Bank Modal */}
+      {showWordBank && currentQuestion.wordBank && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-slate-800 rounded-lg p-6 max-w-md w-full border border-slate-700">
-            <h3 className="text-lg font-semibold text-slate-100 mb-4">Select a word</h3>
-            <div className="grid grid-cols-2 gap-3 mb-4">
-              {availableWords.map((word, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleWordSelect(word)}
-                  className="p-3 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded border border-slate-600 transition-colors text-center"
-                >
-                  {word}
-                </button>
-              ))}
+          <div className="bg-slate-800 rounded-lg p-6 max-w-2xl w-full border border-slate-700">
+            <h3 className="text-lg font-semibold text-slate-100 mb-4">Select the Correct Term</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+              {currentQuestion.wordBank.map((word, index) => {
+                const isUsed = userAnswers.answer === word;
+                return (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      handleWordSelect(word);
+                      setShowWordBank(false);
+                    }}
+                    className={`p-3 rounded border transition-colors text-center ${
+                      isUsed
+                        ? 'bg-green-600 border-green-600 text-white cursor-not-allowed'
+                        : 'bg-slate-700 hover:bg-slate-600 text-slate-200 border-slate-600 hover:border-slate-500'
+                    }`}
+                    disabled={isUsed}
+                  >
+                    {word}
+                  </button>
+                );
+              })}
             </div>
             <div className="text-center">
               <Button

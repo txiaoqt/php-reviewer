@@ -1,182 +1,188 @@
 export const identificationQuestions = [
-  // Chapter 1 Questions
+  // Chapter 1: Fundamentals of Software Engineering (Boss Level - 23 Questions)
   {
-    id: 'chapter-1-set-1',
+    id: 'chapter-1-q1',
     chapterId: 'chapter-1',
-    title: 'Software Engineering Definition',
-    context: 'Software Engineering is the application of a [1], [2], [3] approach to the development, operation, and maintenance of software.',
-    blanks: [
-      { id: 'blank-1', correctAnswer: 'Systematic' },
-      { id: 'blank-2', correctAnswer: 'Disciplined' },
-      { id: 'blank-3', correctAnswer: 'Quantifiable' }
-    ],
-    wordBank: ['Systematic', 'Disciplined', 'Quantifiable', 'Random', 'Unstructured', 'Qualitative'],
-    explanation: 'Software Engineering applies a systematic, disciplined, and quantifiable approach to software development.',
-    hints: [
-      'Think about methodical processes',
-      'Consider professional standards',
-      'Focus on measurable outcomes'
-    ]
+    context: 'A program or piece of software designed and written to fulfill a purpose.',
+    correctAnswer: 'Application',
+    wordBank: ['Application', 'Program', 'Software', 'System'],
+    explanation: 'An application is a program designed to perform specific tasks for users.'
   },
   {
-    id: 'chapter-1-set-2',
+    id: 'chapter-1-q2',
     chapterId: 'chapter-1',
-    title: 'Software Engineering History',
-    context: 'Software Engineering was first introduced in [1] during a conference about the "[2]" caused by the introduction of third-generation hardware.',
-    blanks: [
-      { id: 'blank-1', correctAnswer: '1968' },
-      { id: 'blank-2', correctAnswer: 'Software Crisis' }
-    ],
-    wordBank: ['1968', 'Software Crisis', '1970', 'Hardware Crisis', '1980', 'Programming Crisis'],
-    explanation: 'Software Engineering emerged in 1968 during the "Software Crisis" conference addressing issues with third-generation hardware.',
-    hints: [
-      'Look for the year when SE was formalized',
-      'Consider what crisis led to SE creation'
-    ]
+    context: 'A false belief held by a customer regarding software development.',
+    correctAnswer: 'Customer Myth',
+    wordBank: ['Customer Myth', 'User Belief', 'Client Assumption', 'Buyer Misconception'],
+    explanation: 'Customer myths are misconceptions about software development held by clients.'
   },
   {
-    id: 'chapter-1-set-3',
+    id: 'chapter-1-q3',
     chapterId: 'chapter-1',
-    title: 'Software Development Myths',
-    context: 'A common myth is that if we get behind schedule, we can simply add more [1] to catch up. Another myth is that [2] the project to a third party allows the firm to relax.',
-    blanks: [
-      { id: 'blank-1', correctAnswer: 'Programmers' },
-      { id: 'blank-2', correctAnswer: 'Outsourcing' }
-    ],
-    wordBank: ['Programmers', 'Outsourcing', 'Computers', 'Delegating', 'Managers', 'Subcontracting'],
-    explanation: 'Common myths include adding programmers to catch up (Brook\'s Law) and outsourcing allowing relaxation (which often leads to more problems).',
-    hints: [
-      'Think about Brook\'s Law',
-      'Consider external project management'
-    ]
+    context: 'A plan or drawing produced to show the look and function of something.',
+    correctAnswer: 'Design',
+    wordBank: ['Design', 'Blueprint', 'Plan', 'Diagram'],
+    explanation: 'Design refers to planning the structure and functionality of software.'
   },
   {
-    id: 'chapter-1-set-4',
+    id: 'chapter-1-q4',
     chapterId: 'chapter-1',
-    title: 'Software Failures',
-    context: 'The [1] exploded in 1996 due to a conversion error from 64-bit floating point to 16-bit integer. The [2] was lost in 1999 due to confusion between Imperial and Metric measurements.',
-    blanks: [
-      { id: 'blank-1', correctAnswer: 'Ariane 5' },
-      { id: 'blank-2', correctAnswer: 'Mars Climate Orbiter' }
-    ],
-    wordBank: ['Ariane 5', 'Mars Climate Orbiter', 'Challenger', 'Columbia', 'Apollo 13', 'Hubble Telescope'],
-    explanation: 'The Ariane 5 rocket failed due to data type conversion errors, and the Mars Climate Orbiter was lost due to unit conversion problems.',
-    hints: [
-      'European space rocket failure',
-      'Mars mission lost to measurement confusion'
-    ]
+    context: 'The process of growing or improving.',
+    correctAnswer: 'Development',
+    wordBank: ['Development', 'Growth', 'Progress', 'Evolution'],
+    explanation: 'Development is the process of creating and improving software systems.'
   },
-
-  // Chapter 1-2 Questions (Advanced SE Concepts)
   {
-    id: 'chapter-1-2-set-1',
-    chapterId: 'chapter-1-2',
-    title: 'Requirements Engineering',
-    context: 'Requirements Engineering involves [1] requirements from stakeholders and documenting them in a [2] manner that serves as the foundation for all subsequent development activities.',
-    blanks: [
-      { id: 'blank-1', correctAnswer: 'eliciting' },
-      { id: 'blank-2', correctAnswer: 'verifiable' }
-    ],
-    wordBank: ['eliciting', 'verifiable', 'gathering', 'traceable', 'collecting', 'measurable'],
-    explanation: 'Requirements Engineering focuses on systematically eliciting, analyzing, and documenting stakeholder requirements in a verifiable manner.',
-    hints: [
-      'Process of obtaining requirements',
-      'Requirements must be this to validate'
-    ]
+    id: 'chapter-1-q5',
+    chapterId: 'chapter-1',
+    context: 'Material that describes the features, design, operation, and use of software.',
+    correctAnswer: 'Documentation',
+    wordBank: ['Documentation', 'Manual', 'Guide', 'Instructions'],
+    explanation: 'Documentation provides detailed information about software systems.'
   },
-
-  // Chapter 2 Questions (Software Development Life Cycle)
   {
-    id: 'chapter-2-set-1',
-    chapterId: 'chapter-2',
-    title: 'SDLC Models',
-    context: 'The [1] model follows a linear sequence where each phase must be completed before the next begins, while the [2] model allows for iterative development with customer feedback.',
-    blanks: [
-      { id: 'blank-1', correctAnswer: 'Waterfall' },
-      { id: 'blank-2', correctAnswer: 'Agile' }
-    ],
-    wordBank: ['Waterfall', 'Agile', 'Spiral', 'Scrum', 'V-Model', 'Iterative'],
-    explanation: 'Waterfall follows a sequential approach, while Agile emphasizes iterative development with continuous customer collaboration.',
-    hints: [
-      'Linear, sequential development',
-      'Flexible, iterative approach'
-    ]
+    id: 'chapter-1-q6',
+    chapterId: 'chapter-1',
+    context: 'Applying scientific and practical knowledge to design, build, maintain, and improve processes.',
+    correctAnswer: 'Engineering',
+    wordBank: ['Engineering', 'Technology', 'Science', 'Construction'],
+    explanation: 'Engineering applies systematic approaches to solve technical problems.'
   },
-
-  // Chapter 3 Questions (Requirements Engineering)
   {
-    id: 'chapter-3-set-1',
-    chapterId: 'chapter-3',
-    title: 'Requirements Types',
-    context: '[1] requirements describe what the system must do from the user\'s perspective, while [2] requirements specify how the system should be implemented.',
-    blanks: [
-      { id: 'blank-1', correctAnswer: 'Functional' },
-      { id: 'blank-2', correctAnswer: 'Non-functional' }
-    ],
-    wordBank: ['Functional', 'Non-functional', 'Technical', 'Business', 'User', 'System'],
-    explanation: 'Functional requirements specify what the system should do, while non-functional requirements describe quality attributes like performance and security.',
-    hints: [
-      'What the system does',
-      'Quality attributes and constraints'
-    ]
+    id: 'chapter-1-q7',
+    chapterId: 'chapter-1',
+    context: 'The process of putting a design into effect as a working program or system.',
+    correctAnswer: 'Implementation',
+    wordBank: ['Implementation', 'Execution', 'Realization', 'Deployment'],
+    explanation: 'Implementation is the realization of a design into working software.'
   },
-
-  // Chapter 4 Questions (Software Design)
   {
-    id: 'chapter-4-set-1',
-    chapterId: 'chapter-4',
-    title: 'Design Principles',
-    context: 'The [1] principle states that software should be open for extension but closed for modification, while [2] coupling refers to the degree of interdependence between modules.',
-    blanks: [
-      { id: 'blank-1', correctAnswer: 'Open-Closed' },
-      { id: 'blank-2', correctAnswer: 'Tight' }
-    ],
-    wordBank: ['Open-Closed', 'Tight', 'SOLID', 'Loose', 'Single Responsibility', 'High'],
-    explanation: 'Open-Closed principle promotes extensibility without modification. Coupling measures module interdependence.',
-    hints: [
-      'SOLID principle about extension',
-      'Type of coupling to avoid'
-    ]
+    id: 'chapter-1-q8',
+    chapterId: 'chapter-1',
+    context: 'The process of maintaining or preserving someone or something.',
+    correctAnswer: 'Maintenance',
+    wordBank: ['Maintenance', 'Preservation', 'Upkeep', 'Support'],
+    explanation: 'Maintenance involves keeping software functional and up-to-date.'
   },
-
-  // Chapter 5 Questions (Software Testing)
   {
-    id: 'chapter-5-set-1',
-    chapterId: 'chapter-5',
-    title: 'Testing Levels',
-    context: '[1] testing verifies individual components, [2] testing validates component interactions, and [3] testing evaluates the entire system in the production environment.',
-    blanks: [
-      { id: 'blank-1', correctAnswer: 'Unit' },
-      { id: 'blank-2', correctAnswer: 'Integration' },
-      { id: 'blank-3', correctAnswer: 'System' }
-    ],
-    wordBank: ['Unit', 'Integration', 'System', 'Acceptance', 'Regression', 'Performance'],
-    explanation: 'Testing progresses from unit (components) to integration (interactions) to system (end-to-end) levels.',
-    hints: [
-      'Individual functions/methods',
-      'Component interactions',
-      'Complete system validation'
-    ]
+    id: 'chapter-1-q9',
+    chapterId: 'chapter-1',
+    context: 'The process of dealing with or controlling things or people.',
+    correctAnswer: 'Management',
+    wordBank: ['Management', 'Control', 'Direction', 'Supervision'],
+    explanation: 'Management coordinates resources and processes in software development.'
   },
-
-  // Chapter 6 Questions (Software Maintenance)
   {
-    id: 'chapter-6-set-1',
-    chapterId: 'chapter-6',
-    title: 'Maintenance Types',
-    context: '[1] maintenance fixes bugs discovered after release, [2] maintenance adds new features requested by users, and [3] maintenance adapts software to new environments.',
-    blanks: [
-      { id: 'blank-1', correctAnswer: 'Corrective' },
-      { id: 'blank-2', correctAnswer: 'Perfective' },
-      { id: 'blank-3', correctAnswer: 'Adaptive' }
-    ],
-    wordBank: ['Corrective', 'Perfective', 'Adaptive', 'Preventive', 'Emergency', 'Enhancement'],
-    explanation: 'Software maintenance includes corrective (bug fixes), perfective (enhancements), and adaptive (environment changes) types.',
-    hints: [
-      'Bug fixes and error correction',
-      'Adding new features',
-      'Adapting to new environments'
-    ]
+    id: 'chapter-1-q10',
+    chapterId: 'chapter-1',
+    context: 'A false belief held by managers regarding software development.',
+    correctAnswer: 'Management Myth',
+    wordBank: ['Management Myth', 'Manager Belief', 'Leadership Misconception', 'Executive Fallacy'],
+    explanation: 'Management myths are misconceptions about software project management.'
+  },
+  {
+    id: 'chapter-1-q11',
+    chapterId: 'chapter-1',
+    context: 'A particular form of procedure for accomplishing or approaching something.',
+    correctAnswer: 'Method',
+    wordBank: ['Method', 'Procedure', 'Technique', 'Approach'],
+    explanation: 'A method is a systematic way of doing something.'
+  },
+  {
+    id: 'chapter-1-q12',
+    chapterId: 'chapter-1',
+    context: 'The functioning or use of a process or system.',
+    correctAnswer: 'Operation',
+    wordBank: ['Operation', 'Function', 'Performance', 'Execution'],
+    explanation: 'Operation refers to how systems function in practice.'
+  },
+  {
+    id: 'chapter-1-q13',
+    chapterId: 'chapter-1',
+    context: 'A false belief held by a software developer regarding software development.',
+    correctAnswer: 'Practitioner\'s Myth',
+    wordBank: ['Practitioner\'s Myth', 'Developer Belief', 'Coder Misconception', 'Programmer Fallacy'],
+    explanation: 'Practitioner\'s myths are misconceptions held by software developers.'
+  },
+  {
+    id: 'chapter-1-q14',
+    chapterId: 'chapter-1',
+    context: 'A series of actions or steps taken in order to achieve a particular end.',
+    correctAnswer: 'Process',
+    wordBank: ['Process', 'Procedure', 'Sequence', 'Workflow'],
+    explanation: 'A process is a series of steps to accomplish a goal.'
+  },
+  {
+    id: 'chapter-1-q15',
+    chapterId: 'chapter-1',
+    context: 'The process of writing computer programs.',
+    correctAnswer: 'Programming',
+    wordBank: ['Programming', 'Coding', 'Development', 'Scripting'],
+    explanation: 'Programming is the act of writing instructions for computers.'
+  },
+  {
+    id: 'chapter-1-q16',
+    chapterId: 'chapter-1',
+    context: 'A condition or capability needed by a user to solve a problem.',
+    correctAnswer: 'Requirements',
+    wordBank: ['Requirements', 'Needs', 'Specifications', 'Criteria'],
+    explanation: 'Requirements specify what the software must do.'
+  },
+  {
+    id: 'chapter-1-q17',
+    chapterId: 'chapter-1',
+    context: 'Systematic investigation into and study of materials and sources to establish facts.',
+    correctAnswer: 'Research',
+    wordBank: ['Research', 'Investigation', 'Study', 'Analysis'],
+    explanation: 'Research involves systematic study to discover new knowledge.'
+  },
+  {
+    id: 'chapter-1-q18',
+    chapterId: 'chapter-1',
+    context: 'A collection of integrated computer programs.',
+    correctAnswer: 'Software',
+    wordBank: ['Software', 'Programs', 'Applications', 'Code'],
+    explanation: 'Software is a collection of programs and data.'
+  },
+  {
+    id: 'chapter-1-q19',
+    chapterId: 'chapter-1',
+    context: 'A false belief about software or the software development process.',
+    correctAnswer: 'Software Development Myth',
+    wordBank: ['Software Development Myth', 'Coding Myth', 'Programming Misconception', 'Development Fallacy'],
+    explanation: 'Software development myths are common misconceptions about software creation.'
+  },
+  {
+    id: 'chapter-1-q20',
+    chapterId: 'chapter-1',
+    context: 'Application of systematic, disciplined, quantifiable approach to software development, operation, and maintenance.',
+    correctAnswer: 'Software Engineering',
+    wordBank: ['Software Engineering', 'Systems Engineering', 'Computer Engineering', 'Development Engineering'],
+    explanation: 'Software Engineering applies engineering principles to software development.'
+  },
+  {
+    id: 'chapter-1-q21',
+    chapterId: 'chapter-1',
+    context: 'An instance where a software system does not perform as expected or fails entirely.',
+    correctAnswer: 'System Failure',
+    wordBank: ['System Failure', 'System Crash', 'Software Error', 'System Breakdown'],
+    explanation: 'System failure occurs when software doesn't work as intended.'
+  },
+  {
+    id: 'chapter-1-q22',
+    chapterId: 'chapter-1',
+    context: 'Done or acting according to a fixed plan or system; methodical.',
+    correctAnswer: 'Systematic',
+    wordBank: ['Systematic', 'Methodical', 'Organized', 'Structured'],
+    explanation: 'Systematic means following an orderly plan or method.'
+  },
+  {
+    id: 'chapter-1-q23',
+    chapterId: 'chapter-1',
+    context: 'The process of checking if a system works correctly.',
+    correctAnswer: 'Testing',
+    wordBank: ['Testing', 'Verification', 'Validation', 'Quality Assurance'],
+    explanation: 'Testing verifies that software works as expected.'
   }
 ];
 
