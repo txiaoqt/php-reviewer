@@ -166,7 +166,7 @@ export const identificationQuestions = [
     context: 'An instance where a software system does not perform as expected or fails entirely.',
     correctAnswer: 'System Failure',
     wordBank: ['System Failure', 'System Crash', 'Software Error', 'System Breakdown'],
-    explanation: 'System failure occurs when software doesn't work as intended.'
+    explanation: 'System failure occurs when software doesnt work as intended.'
   },
   {
     id: 'chapter-1-q22',

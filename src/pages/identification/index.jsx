@@ -7,17 +7,17 @@ import Icon from '../../components/AppIcon';
 
 // Chapter configuration with the specific hierarchy
 const chapters = [
-  { id: 'chapter-1', title: 'Chapter 1', description: 'Software Engineering Fundamentals', isLocked: false },
-  { id: 'chapter-1-2', title: 'Chapter 1-2', description: 'Advanced SE Concepts', isLocked: true },
-  { id: 'chapter-2', title: 'Chapter 2', description: 'Software Development Life Cycle', isLocked: false },
-  { id: 'chapter-3', title: 'Chapter 3', description: 'Requirements Engineering', isLocked: false },
-  { id: 'chapter-4', title: 'Chapter 4', description: 'Software Design', isLocked: false },
-  { id: 'chapter-5', title: 'Chapter 5', description: 'Software Testing', isLocked: false },
-  { id: 'chapter-6', title: 'Chapter 6', description: 'Software Maintenance', isLocked: false },
-  { id: 'chapter-7', title: 'Chapter 7', description: 'Software Quality Assurance', isLocked: false },
-  { id: 'chapter-8', title: 'Chapter 8', description: 'Project Management', isLocked: false },
-  { id: 'chapter-9', title: 'Chapter 9', description: 'Risk Management', isLocked: false },
-  { id: 'chapter-10', title: 'Chapter 10', description: 'Configuration Management', isLocked: false }
+  { id: 'chapter-1', title: 'Chapter 1', description: 'This is the chapter 1 based on the google classroom', isLocked: false },
+  { id: 'chapter-1-2', title: 'Chapter 1-2', description: 'This is the chapter 1-2 based on the google classroom', isLocked: true },
+  { id: 'chapter-2', title: 'Chapter 2', description: 'This is the chapter 2 based on the google classroom', isLocked: false },
+  { id: 'chapter-3', title: 'Chapter 3', description: 'This is the chapter 3 based on the google classroom', isLocked: false },
+  { id: 'chapter-3-2', title: 'Chapter 3-2', description: 'This is the chapter 3-2 based on the google classroom', isLocked: false },
+  { id: 'chapter-4', title: 'Chapter 4', description: 'This is the chapter 4 based on the google classroom', isLocked: false },
+  { id: 'chapter-5-1', title: 'Chapter 5-1', description: 'This is the chapter 5-1 based on the google classroom', isLocked: false },
+  { id: 'chapter-5-2', title: 'Chapter 5-2', description: 'This is the chapter 5-2 based on the google classroom', isLocked: false },
+  { id: 'chapter-6-1', title: 'Chapter 6-1', description: 'This is the chapter 6-1 based on the google classroom', isLocked: false },
+  { id: 'chapter-6-2', title: 'Chapter 6-2', description: 'This is the chapter 6-2 based on the google classroom', isLocked: false },
+  { id: 'chapter-7', title: 'Chapter 7', description: 'This is the chapter 7 based on the google classroom', isLocked: false }
 ];
 
 const IdentificationChapters = () => {
@@ -81,16 +81,15 @@ const IdentificationChapters = () => {
       <main className="pt-20 pb-32 px-4 md:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           {/* Page Header */}
-          <div className="mb-8 md:mb-12">
-            <div className="flex items-center gap-2 mb-4">
-              <Icon name="Brain" size={28} color="#0EA5E9" />
-              <h1 className="text-3xl md:text-4xl font-bold text-slate-100">
-                Identification - Technological Terms
-              </h1>
-            </div>
-            <p className="text-lg text-slate-400 max-w-3xl">
-              Master key technological concepts through interactive identification exercises.
-              Choose a chapter below to begin learning.
+          <div className="mb-6">
+            <span className="text-xs font-mono text-blue-400 uppercase tracking-wider">
+              Identification
+            </span>
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-100 mt-1 leading-tight">
+              Technological Terms
+            </h1>
+            <p className="text-slate-400 text-sm mt-2">
+              Choose a chapter to begin learning
             </p>
           </div>
 
@@ -145,17 +144,11 @@ const IdentificationChapters = () => {
 
                     <div className="flex-1 min-w-0">
                       <h3 className={`
-                        text-xl font-semibold mb-2
+                        text-xl font-semibold
                         ${chapter.isLocked ? 'text-slate-500' : 'text-slate-100'}
                       `}>
                         {chapter.title}
                       </h3>
-                      <p className={`
-                        text-sm leading-relaxed
-                        ${chapter.isLocked ? 'text-slate-500' : 'text-slate-400'}
-                      `}>
-                        {chapter.description}
-                      </p>
 
                       {/* Progress Indicator */}
                       {!chapter.isLocked && chapterProgress.totalLevels > 0 && (
@@ -185,52 +178,71 @@ const IdentificationChapters = () => {
 
       {/* Mode Selection Modal */}
       {showModeModal && selectedChapter && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-slate-800 rounded-lg p-6 max-w-md w-full border border-slate-700">
-            <div className="text-center mb-6">
-              <Icon name="Brain" size={48} color="#0EA5E9" className="mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-slate-100 mb-2">
-                {selectedChapter.title}
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-[#0d1117] w-full max-w-md rounded-2xl border border-slate-700 shadow-2xl overflow-hidden">
+
+            {/* Header Section */}
+            <div className="p-6 text-center border-b border-slate-800 bg-slate-800/50">
+              <div className="w-12 h-12 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Icon name="Brain" size={24} className="text-blue-400" />
+              </div>
+              <h2 className="text-xl md:text-2xl font-bold text-slate-100 mb-1">
+                Choose Learning Mode
               </h2>
-              <p className="text-slate-400">
-                Choose your learning mode for this chapter
+              <p className="text-slate-400 text-sm">
+                {selectedChapter.title}: {selectedChapter.description}
               </p>
             </div>
 
-            <div className="space-y-4">
-              <Button
-                onClick={() => handleModeSelect('recall')}
-                className="w-full bg-[#0EA5E9] hover:bg-[#0284c7] text-white py-4 text-lg font-semibold"
-                iconName="Type"
-                iconPosition="left"
-              >
-                <div className="text-left">
-                  <div className="font-bold">Recall Mode</div>
-                  <div className="text-sm opacity-90">Type answers manually - Hardcore learning</div>
-                </div>
-              </Button>
+            {/* Selection Cards */}
+            <div className="p-6 space-y-4">
 
-              <Button
+              {/* Option 1: Recognition */}
+              <button
                 onClick={() => handleModeSelect('recognition')}
-                className="w-full bg-slate-700 hover:bg-slate-600 text-white py-4 text-lg font-semibold"
-                iconName="MousePointer"
-                iconPosition="left"
+                className="w-full group relative flex items-start gap-4 p-4 rounded-xl bg-slate-800/50 border border-slate-700 hover:border-blue-500 hover:bg-blue-500/5 transition-all text-left"
               >
-                <div className="text-left">
-                  <div className="font-bold">Recognition Mode</div>
-                  <div className="text-sm opacity-90">Select from word bank - Guided learning</div>
+                <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-colors">
+                  <Icon name="Eye" size={20} />
                 </div>
-              </Button>
+                <div>
+                  <h3 className="font-semibold text-slate-200 group-hover:text-blue-400 transition-colors">
+                    Recognition Mode
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-1">
+                    Select answers from a word bank. Best for guided learning.
+                  </p>
+                </div>
+              </button>
+
+              {/* Option 2: Recall */}
+              <button
+                onClick={() => handleModeSelect('recall')}
+                className="w-full group relative flex items-start gap-4 p-4 rounded-xl bg-slate-800/50 border border-slate-700 hover:border-purple-500 hover:bg-purple-500/5 transition-all text-left"
+              >
+                <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400 group-hover:bg-purple-500 group-hover:text-white transition-colors">
+                  <Icon name="Keyboard" size={20} />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-slate-200 group-hover:text-purple-400 transition-colors">
+                    Recall Mode
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-1">
+                    Type answers manually. Hardcore learning for mastery.
+                  </p>
+                </div>
+              </button>
+
             </div>
 
-            <div className="mt-6 text-center">
-              <Button
+            {/* Footer */}
+            <div className="p-4 border-t border-slate-800 bg-slate-900/50 text-center">
+              <button
                 onClick={closeModal}
-                variant="ghost"
-                className="text-slate-400 hover:text-slate-300"
+                className="text-slate-400 hover:text-slate-200 text-sm font-medium transition-colors"
               >
                 Cancel
-              </Button>
+              </button>
             </div>
           </div>
         </div>

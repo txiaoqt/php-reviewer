@@ -11,58 +11,77 @@ const IdentificationQuiz = () => {
   const navigate = useNavigate();
 
   const { recordAnswer, getModuleProgress } = useProgress();
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState({});
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [showWordBank, setShowWordBank] = useState(false);
+  const [selectedBlankIndex, setSelectedBlankIndex] = useState(null);
 
   // Get questions for this chapter
   const chapterQuestions = useMemo(() => {
     return getQuestionsForChapter(chapterId);
   }, [chapterId]);
 
-  const currentQuestion = chapterQuestions[currentQuestionIndex];
+  // Create a combined word bank with all correct answers plus additional distractors
+  const wordBank = useMemo(() => {
+    const correctAnswers = chapterQuestions.map(q => q.correctAnswer);
+    // Add some related distractors to confuse users
+    const distractors = [
+      'Evolution', 'Innovation', 'Algorithm', 'Framework', 'Prototype',
+      'Iteration', 'Debugging', 'Optimization', 'Refactoring', 'Integration',
+      'Deployment', 'Configuration', 'Architecture', 'Interface', 'Protocol'
+    ];
+    return [...correctAnswers, ...distractors];
+  }, [chapterQuestions]);
 
-  // Initialize user answers when question changes
-  useEffect(() => {
-    if (currentQuestion) {
-      setUserAnswers({});
-      setShowFeedback(false);
-    }
-  }, [currentQuestion]);
+  const handleBlankClick = (questionIndex) => {
+    setSelectedBlankIndex(questionIndex);
+    setShowWordBank(true);
+  };
 
   const handleWordSelect = (word) => {
-    setUserAnswers({ answer: word });
+    if (selectedBlankIndex !== null) {
+      setUserAnswers(prev => ({
+        ...prev,
+        [selectedBlankIndex]: word
+      }));
+    }
     setShowWordBank(false);
+    setSelectedBlankIndex(null);
   };
 
   const handleSubmit = () => {
-    if (!currentQuestion || !userAnswers.answer) return;
+    // Check if all questions have answers
+    const allAnswered = chapterQuestions.every((_, index) => userAnswers[index]);
 
-    const correct = userAnswers.answer.toLowerCase() === currentQuestion.correctAnswer.toLowerCase();
-    setIsCorrect(correct);
+    if (!allAnswered) {
+      alert('Please fill in all blanks before submitting.');
+      return;
+    }
+
+    // Check if all answers are correct
+    const allCorrect = chapterQuestions.every((question, index) =>
+      userAnswers[index]?.toLowerCase() === question.correctAnswer.toLowerCase()
+    );
+
+    setIsCorrect(allCorrect);
     setShowFeedback(true);
 
-    // Record the answer in session stats
-    recordAnswer('identification-terms', correct);
-  };
-
-  const handleNext = () => {
-    if (currentQuestionIndex < chapterQuestions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
-    } else {
-      // Chapter completed - go back to chapters page
-      navigate('/identification/chapters');
-    }
+    // Record the answer in session stats (simplified - just record completion)
+    recordAnswer('identification-terms', allCorrect);
   };
 
   const handleRetry = () => {
     setUserAnswers({});
     setShowFeedback(false);
+    setSelectedBlankIndex(null);
   };
 
-  if (!currentQuestion) {
+  const handleComplete = () => {
+    navigate('/identification/chapters');
+  };
+
+  if (!chapterQuestions.length) {
     return (
       <div className="min-h-screen bg-[#0d1117] text-slate-200 flex items-center justify-center">
         <div className="text-center">
@@ -81,17 +100,17 @@ const IdentificationQuiz = () => {
       {/* Header */}
       <ProgressHeader
         isMinimal={true}
-        currentLevel={currentQuestionIndex + 1}
-        totalLevels={chapterQuestions.length}
-        currentChallenge={1}
-        totalChallenges={1}
+        currentLevel={1}
+        totalLevels={1}
+        currentChallenge={Object.keys(userAnswers).length}
+        totalChallenges={chapterQuestions.length}
         accuracy={0}
         streak={0}
       />
 
       {/* Main Content */}
       <main className="pt-20 pb-32 px-4 md:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           {/* Question Header */}
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-4">
@@ -101,53 +120,57 @@ const IdentificationQuiz = () => {
               </h1>
             </div>
             <p className="text-lg text-slate-400">
-              Question {currentQuestionIndex + 1} of {chapterQuestions.length}
+              Fill in all 23 blanks with the correct terms from the word bank below
             </p>
           </div>
 
-          {/* Context Text */}
-          <div className="bg-slate-800 rounded-lg p-6 mb-6 border border-slate-700">
-            <div className="text-lg leading-relaxed text-slate-200 mb-6">
-              {currentQuestion.context}
-            </div>
+          {/* Questions List */}
+          <div className="bg-slate-800 rounded-lg p-4 md:p-6 mb-6 border border-slate-700">
+            <div className="space-y-4">
+              {chapterQuestions.map((question, index) => (
+                <div key={question.id} className="flex flex-row items-start gap-3">
+                  <button
+                    onClick={() => handleBlankClick(index)}
+                    disabled={showFeedback}
+                    className="w-36 shrink-0 px-2 py-2 bg-slate-700 hover:bg-slate-600 border-2 border-slate-600 rounded-lg text-slate-200 text-sm font-mono transition-all hover:border-blue-500 hover:bg-blue-500/10 text-center flex items-center justify-center min-h-[44px]"
+                  >
+                    {userAnswers[index] || <span className="opacity-50">[Select]</span>}
+                  </button>
 
-            {/* Answer Blank Button */}
-            <div className="flex justify-center">
-              <button
-                onClick={() => setShowWordBank(true)}
-                className="px-6 py-4 bg-slate-700 hover:bg-slate-600 border-2 border-slate-600 rounded-lg text-slate-200 text-xl font-mono transition-all hover:border-blue-500 hover:bg-blue-500/10"
-                disabled={showFeedback}
-              >
-                {userAnswers.answer || '[ Tap to Select Term ]'}
-              </button>
+                  <span className="text-slate-200 text-sm sm:text-lg leading-relaxed pt-1.5">
+                    {question.context}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Word Bank Display */}
-          {currentQuestion.wordBank && (
-            <div className="bg-slate-800 rounded-lg p-6 mb-6 border border-slate-700">
-              <h3 className="text-lg font-semibold text-slate-100 mb-4">Available Terms</h3>
-              <div className="flex flex-wrap gap-2">
-                {currentQuestion.wordBank.map((word, index) => {
-                  const isUsed = userAnswers.answer === word;
-                  return (
-                    <button
-                      key={index}
-                      onClick={() => !isUsed && handleWordSelect(word)}
-                      className={`px-3 py-2 rounded border transition-colors ${
-                        isUsed
-                          ? 'bg-green-600 border-green-600 text-white cursor-not-allowed'
-                          : 'bg-slate-700 hover:bg-slate-600 text-slate-200 border-slate-600 hover:border-slate-500'
-                      }`}
-                      disabled={isUsed || showFeedback}
-                    >
-                      {word}
-                    </button>
-                  );
-                })}
-              </div>
+          {/* Word Bank */}
+          <div className="bg-slate-800 rounded-lg p-6 mb-6 border border-slate-700">
+            <h3 className="text-lg font-semibold text-slate-100 mb-4">Available Terms</h3>
+            <div className="flex flex-wrap gap-2">
+              {wordBank.map((word, index) => {
+                const isUsed = Object.values(userAnswers).includes(word);
+                return (
+                  <button
+                    key={index}
+                    onClick={() => !isUsed && handleWordSelect(word)}
+                    className={`px-3 py-2 rounded border transition-colors ${
+                      isUsed
+                        ? 'bg-green-600 border-green-600 text-white cursor-not-allowed'
+                        : 'bg-slate-700 hover:bg-slate-600 text-slate-200 border-slate-600 hover:border-slate-500'
+                    }`}
+                    disabled={isUsed || showFeedback}
+                  >
+                    {word}
+                  </button>
+                );
+              })}
             </div>
-          )}
+            <p className="text-sm text-slate-400 mt-4">
+              💡 Tip: Some words are distractors to test your knowledge!
+            </p>
+          </div>
 
           {/* Feedback */}
           {showFeedback && (
@@ -163,20 +186,35 @@ const IdentificationQuiz = () => {
                   color={isCorrect ? "#10B981" : "#EF4444"}
                 />
                 <h3 className="text-lg font-semibold">
-                  {isCorrect ? 'Correct!' : 'Incorrect'}
+                  {isCorrect ? 'Perfect! All answers correct!' : 'Some answers are incorrect'}
                 </h3>
               </div>
-              <p className="text-sm mb-4">{currentQuestion.explanation}</p>
-              <div className="text-sm text-slate-400 mb-4">
-                <strong>Correct Answer:</strong> {currentQuestion.correctAnswer}
-              </div>
+              {!isCorrect && (
+                <div className="mb-4">
+                  <p className="text-sm mb-2">Incorrect answers:</p>
+                  <ul className="text-sm space-y-1">
+                    {chapterQuestions.map((question, index) => {
+                      const userAnswer = userAnswers[index];
+                      const isWrong = userAnswer && userAnswer.toLowerCase() !== question.correctAnswer.toLowerCase();
+                      if (isWrong) {
+                        return (
+                          <li key={index} className="text-red-300">
+                            • "{userAnswer}" should be "{question.correctAnswer}"
+                          </li>
+                        );
+                      }
+                      return null;
+                    })}
+                  </ul>
+                </div>
+              )}
 
               <div className="flex gap-4">
                 <Button
-                  onClick={handleNext}
-                  className={isCorrect ? 'bg-green-600 hover:bg-green-700' : 'bg-slate-600 hover:bg-slate-700'}
+                  onClick={handleComplete}
+                  className="bg-[#0EA5E9] hover:bg-[#0284c7]"
                 >
-                  {currentQuestionIndex < chapterQuestions.length - 1 ? 'Next Question' : 'Complete Chapter'}
+                  Complete Chapter
                 </Button>
                 {!isCorrect && (
                   <Button
@@ -192,13 +230,13 @@ const IdentificationQuiz = () => {
           )}
 
           {/* Submit Button */}
-          {!showFeedback && userAnswers.answer && (
+          {!showFeedback && Object.keys(userAnswers).length === chapterQuestions.length && (
             <div className="flex justify-center">
               <Button
                 onClick={handleSubmit}
                 className="bg-[#0EA5E9] hover:bg-[#0284c7] px-8 py-3 text-lg"
               >
-                Submit Answer
+                Check All Answers
               </Button>
             </div>
           )}
@@ -206,21 +244,20 @@ const IdentificationQuiz = () => {
       </main>
 
       {/* Word Bank Modal */}
-      {showWordBank && currentQuestion.wordBank && (
+      {showWordBank && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-slate-800 rounded-lg p-6 max-w-2xl w-full border border-slate-700">
-            <h3 className="text-lg font-semibold text-slate-100 mb-4">Select the Correct Term</h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
-              {currentQuestion.wordBank.map((word, index) => {
-                const isUsed = userAnswers.answer === word;
+            <h3 className="text-lg font-semibold text-slate-100 mb-4">Select a Term</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-4 overflow-y-auto max-h-[60vh]">
+              {wordBank.map((word, index) => {
+                const isUsed = Object.values(userAnswers).includes(word);
                 return (
                   <button
                     key={index}
                     onClick={() => {
                       handleWordSelect(word);
-                      setShowWordBank(false);
                     }}
-                    className={`p-3 rounded border transition-colors text-center ${
+                    className={`p-2 rounded border transition-colors text-center text-sm font-medium h-auto min-h-[50px] flex items-center justify-center whitespace-normal break-words ${
                       isUsed
                         ? 'bg-green-600 border-green-600 text-white cursor-not-allowed'
                         : 'bg-slate-700 hover:bg-slate-600 text-slate-200 border-slate-600 hover:border-slate-500'

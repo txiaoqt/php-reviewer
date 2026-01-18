@@ -14,13 +14,13 @@ export const modules = [
   {
     id: 'identification-terms',
     title: 'Identification - Technological Terms',
-    description: 'Learn key technological concepts and terminology through interactive identification exercises.',
+    description: 'Master 23 key software engineering terms in one comprehensive challenge.',
     icon: 'Brain',
     level: 'Intermediate',
-    totalLevels: 11,
+    totalLevels: 23,
     completedLevels: 0,
     isLocked: false,
     color: 'bg-accent',
-    path: '/identification/chapters'
+    path: '/identification/quiz'
   }
 ];

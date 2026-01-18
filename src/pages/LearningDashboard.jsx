@@ -97,7 +97,7 @@ const LearningDashboard = () => {
                 Choose Your Learning Path
               </h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Select a module to start learning. Complete modules to unlock new challenges and advance your PHP skills.
+                Select a module to start learning. Complete modules to unlock new challenges.
               </p>
             </div>
 
