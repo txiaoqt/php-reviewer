@@ -138,6 +138,20 @@ export function ProgressProvider({ children }) {
     };
   };
 
+  // Get progress for a specific module
+  const getModuleProgress = (moduleId) => {
+    const module = modules.find(m => m.id === moduleId);
+    if (!module) return null;
+
+    return {
+      id: module.id,
+      title: module.title,
+      completedLevels: module.completedLevels,
+      totalLevels: module.totalLevels,
+      isLocked: module.isLocked
+    };
+  };
+
 
 
   return (
@@ -149,7 +163,8 @@ export function ProgressProvider({ children }) {
       setCurrentQuestionIndex,
       startModuleSession,
       recordAnswer,
-      getModuleSessionStats
+      getModuleSessionStats,
+      getModuleProgress
     }}>
       {children}
     </ProgressContext.Provider>

@@ -20,6 +20,7 @@ const Routes = () => {
         {/* Define your route here */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/dashboard" element={<LearningDashboard />} />
+        <Route path="/code-challenge-editor" element={<LearningDashboard />} />
         <Route path="/code-challenge-editor/:moduleId" element={<CodeChallengeEditor />} />
         <Route path="/identification/chapters" element={<IdentificationChapters />} />
         <Route path="/identification/quiz/:chapterId" element={<IdentificationQuiz />} />
