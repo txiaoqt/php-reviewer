@@ -1,6 +1,83 @@
-# React + TypeScript + Vite
+# PHP Code Reviewer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive learning platform for PHP and web development education, built with React, TypeScript, and Vite. Features include code challenge editors, progress tracking, and Bootstrap component learning modules.
+
+## Features
+
+- **Interactive Code Challenges**: Fill-in-the-blank coding exercises with real-time preview
+- **Bootstrap Learning Modules**: Comprehensive Bootstrap component tutorials
+- **Progress Tracking**: Track learning progress across modules and challenges
+- **Live Code Preview**: See your code changes in real-time
+- **Hint System**: Progressive hints to help learners when stuck
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- npm or yarn
+
+### Installation
+
+```bash
+npm install
+```
+
+### Development
+
+```bash
+npm run dev
+```
+
+### Build
+
+```bash
+npm run build
+```
+
+### Preview
+
+```bash
+npm run preview
+```
+
+## Project Structure
+
+```
+src/
+├── components/          # Reusable UI components
+├── context/            # React context providers
+├── data/               # Static data and questions
+├── pages/              # Main application pages
+│   ├── code-challenge-editor/  # Interactive coding challenges
+│   ├── level-progress-dashboard/  # Progress tracking
+│   └── challenge-success/       # Success pages
+├── styles/             # Global styles and Tailwind config
+└── utils/              # Utility functions
+```
+
+## Documentation
+
+📖 **Complete Documentation**: [CODE_CHALLENGE_EDITOR_DOCS.md](CODE_CHALLENGE_EDITOR_DOCS.md)
+
+The documentation includes:
+- Validation function for user answers
+- Code preview functionality
+- Code challenge editor components
+- Data structures and API references
+- Performance optimizations and best practices
+
+## Tech Stack
+
+- **Frontend**: React 18, TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS
+- **UI Framework**: Custom components with Bootstrap integration
+- **State Management**: React Context API
+- **Routing**: React Router
+
+## Development Tools
 
 Currently, two official plugins are available:
 
