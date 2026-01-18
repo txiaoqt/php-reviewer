@@ -8,7 +8,8 @@ export const modules = [
     totalLevels: 7,
     completedLevels: 0,
     isLocked: false,
-    color: 'bg-primary'
+    color: 'bg-primary',
+    path: '/code-challenge-editor/php-basics'
   },
   {
     id: 'identification-terms',
