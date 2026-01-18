@@ -13,6 +13,8 @@ export function ProgressProvider({ children }) {
       // If we have more than 2 modules or the second module isn't "identification-terms", reload from file
       if (parsed.length !== 2 || parsed[1]?.id !== 'identification-terms') {
         console.log('Module structure changed, reloading from file');
+        // Clear the cached data to ensure clean reload
+        localStorage.removeItem('codefill_progress');
         return initialModules;
       }
       return parsed;
