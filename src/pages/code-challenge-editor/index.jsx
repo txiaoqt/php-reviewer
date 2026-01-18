@@ -19,7 +19,11 @@ const CodeChallengeEditor = () => {
 
   // Get all questions for this module (15 total) - memoized to prevent unnecessary recalculations
   const allModuleQuestions = useMemo(() => {
-    return questions.filter(q => q.moduleId === moduleId);
+    console.log('Module ID:', moduleId);
+    console.log('All questions:', questions.length);
+    const filtered = questions.filter(q => q.moduleId === moduleId);
+    console.log('Filtered questions:', filtered.length);
+    return filtered;
   }, [moduleId]);
 
   // Randomly select 10 questions from the 15 available - memoized to prevent infinite loops
