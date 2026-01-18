@@ -12,7 +12,7 @@ const LearningDashboard = () => {
 
   const handleModuleClick = (module) => {
     if (!module.isLocked) {
-      navigate(`/code-challenge-editor/${module.id}`);
+      navigate(module.path || `/code-challenge-editor/${module.id}`);
     }
   };
 
