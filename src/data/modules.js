@@ -8,8 +8,7 @@ export const modules = [
     totalLevels: 7,
     completedLevels: 0,
     isLocked: false,
-    color: 'bg-primary',
-    path: '/code-challenge-editor'
+    color: 'bg-primary'
   },
   {
     id: 'identification-terms',
