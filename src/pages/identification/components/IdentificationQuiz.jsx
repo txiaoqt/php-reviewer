@@ -9,6 +9,8 @@ import Icon from '../../../components/AppIcon';
 const IdentificationQuiz = () => {
   const { chapterId } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const mode = searchParams.get('mode') || 'recognition'; // Default to recognition mode
 
   const { recordAnswer, getModuleProgress } = useProgress();
   const [userAnswers, setUserAnswers] = useState({});
@@ -35,8 +37,11 @@ const IdentificationQuiz = () => {
   }, [chapterQuestions]);
 
   const handleBlankClick = (questionIndex) => {
-    setSelectedBlankIndex(questionIndex);
-    setShowWordBank(true);
+    if (mode === 'recognition') {
+      setSelectedBlankIndex(questionIndex);
+      setShowWordBank(true);
+    }
+    // In recall mode, blanks are not clickable - handled by input fields
   };
 
   const handleWordSelect = (word) => {
@@ -48,6 +53,13 @@ const IdentificationQuiz = () => {
     }
     setShowWordBank(false);
     setSelectedBlankIndex(null);
+  };
+
+  const handleRecallInput = (questionIndex, value) => {
+    setUserAnswers(prev => ({
+      ...prev,
+      [questionIndex]: value
+    }));
   };
 
   const handleSubmit = () => {
@@ -120,7 +132,10 @@ const IdentificationQuiz = () => {
               </h1>
             </div>
             <p className="text-lg text-slate-400">
-              Fill in all 23 blanks with the correct terms from the word bank below
+              {mode === 'recognition'
+                ? 'Fill in all 23 blanks by selecting terms from the word bank'
+                : 'Fill in all 23 blanks by typing the correct terms manually'
+              }
             </p>
           </div>
 
@@ -129,13 +144,26 @@ const IdentificationQuiz = () => {
             <div className="space-y-4">
               {chapterQuestions.map((question, index) => (
                 <div key={question.id} className="flex flex-row items-start gap-3">
-                  <button
-                    onClick={() => handleBlankClick(index)}
-                    disabled={showFeedback}
-                    className="w-36 shrink-0 px-2 py-2 bg-slate-700 hover:bg-slate-600 border-2 border-slate-600 rounded-lg text-slate-200 text-sm font-mono transition-all hover:border-blue-500 hover:bg-blue-500/10 text-center flex items-center justify-center min-h-[44px]"
-                  >
-                    {userAnswers[index] || <span className="opacity-50">[Select]</span>}
-                  </button>
+                  {mode === 'recognition' ? (
+                    // Recognition Mode: Clickable button
+                    <button
+                      onClick={() => handleBlankClick(index)}
+                      disabled={showFeedback}
+                      className="w-36 shrink-0 px-2 py-2 bg-slate-700 hover:bg-slate-600 border-2 border-slate-600 rounded-lg text-slate-200 text-sm font-mono transition-all hover:border-blue-500 hover:bg-blue-500/10 text-center flex items-center justify-center min-h-[44px]"
+                    >
+                      {userAnswers[index] || <span className="opacity-50">[Select]</span>}
+                    </button>
+                  ) : (
+                    // Recall Mode: Input field
+                    <input
+                      type="text"
+                      value={userAnswers[index] || ''}
+                      onChange={(e) => handleRecallInput(index, e.target.value)}
+                      disabled={showFeedback}
+                      className="w-36 shrink-0 px-2 py-2 bg-slate-700 border-2 border-slate-600 rounded-lg text-slate-200 text-sm font-mono text-center focus:border-blue-500 focus:outline-none min-h-[44px]"
+                      placeholder="Type term"
+                    />
+                  )}
 
                   <span className="text-slate-200 text-sm sm:text-lg leading-relaxed pt-1.5">
                     {question.context}
@@ -145,32 +173,46 @@ const IdentificationQuiz = () => {
             </div>
           </div>
 
-          {/* Word Bank */}
-          <div className="bg-slate-800 rounded-lg p-6 mb-6 border border-slate-700">
-            <h3 className="text-lg font-semibold text-slate-100 mb-4">Available Terms</h3>
-            <div className="flex flex-wrap gap-2">
-              {wordBank.map((word, index) => {
-                const isUsed = Object.values(userAnswers).includes(word);
-                return (
-                  <button
-                    key={index}
-                    onClick={() => !isUsed && handleWordSelect(word)}
-                    className={`px-3 py-2 rounded border transition-colors ${
-                      isUsed
-                        ? 'bg-green-600 border-green-600 text-white cursor-not-allowed'
-                        : 'bg-slate-700 hover:bg-slate-600 text-slate-200 border-slate-600 hover:border-slate-500'
-                    }`}
-                    disabled={isUsed || showFeedback}
-                  >
-                    {word}
-                  </button>
-                );
-              })}
+          {/* Word Bank - Only show in recognition mode */}
+          {mode === 'recognition' && (
+            <div className="bg-slate-800 rounded-lg p-6 mb-6 border border-slate-700">
+              <h3 className="text-lg font-semibold text-slate-100 mb-4">Available Terms</h3>
+              <div className="flex flex-wrap gap-2">
+                {wordBank.map((word, index) => {
+                  const isUsed = Object.values(userAnswers).includes(word);
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => !isUsed && handleWordSelect(word)}
+                      className={`px-3 py-2 rounded border transition-colors ${
+                        isUsed
+                          ? 'bg-green-600 border-green-600 text-white cursor-not-allowed'
+                          : 'bg-slate-700 hover:bg-slate-600 text-slate-200 border-slate-600 hover:border-slate-500'
+                      }`}
+                      disabled={isUsed || showFeedback}
+                    >
+                      {word}
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="text-sm text-slate-400 mt-4">
+                💡 Tip: Some words are distractors to test your knowledge!
+              </p>
             </div>
-            <p className="text-sm text-slate-400 mt-4">
-              💡 Tip: Some words are distractors to test your knowledge!
-            </p>
-          </div>
+          )}
+
+          {/* Recall Mode Instructions */}
+          {mode === 'recall' && (
+            <div className="bg-slate-800 rounded-lg p-6 mb-6 border border-slate-700">
+              <div className="text-center">
+                <h3 className="text-lg font-semibold text-slate-100 mb-2">Recall Mode</h3>
+                <p className="text-sm text-slate-400">
+                  Type the correct terms in each blank. This tests your ability to remember the definitions without hints.
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* Feedback */}
           {showFeedback && (
