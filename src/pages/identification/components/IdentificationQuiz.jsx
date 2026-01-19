@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useProgress } from '../../../context/ProgressContext';
 import { getQuestionsForChapter } from '../../../data/identificationQuestions';
 import ProgressHeader from '../../../components/navigation/ProgressHeader';
@@ -109,16 +109,7 @@ const IdentificationQuiz = () => {
 
   return (
     <div className="min-h-screen bg-[#0d1117] text-slate-200">
-      {/* Header */}
-      <ProgressHeader
-        isMinimal={true}
-        currentLevel={1}
-        totalLevels={1}
-        currentChallenge={Object.keys(userAnswers).length}
-        totalChallenges={chapterQuestions.length}
-        accuracy={0}
-        streak={0}
-      />
+      {/* Header - Removed level display */}
 
       {/* Main Content */}
       <main className="pt-20 pb-32 px-4 md:px-6 lg:px-8">
