@@ -22,5 +22,17 @@ export const modules = [
     isLocked: false,
     color: 'bg-accent',
     path: '/identification/quiz'
+  },
+  {
+    id: 'compete-friends',
+    title: 'Compete with Friends',
+    description: 'Challenge your friends in real-time coding competitions.',
+    icon: 'Users',
+    level: 'Advanced',
+    totalLevels: 10,
+    completedLevels: 0,
+    isLocked: false,
+    color: 'bg-secondary',
+    path: '/compete-with-friends'
   }
 ];

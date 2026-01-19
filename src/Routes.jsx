@@ -10,6 +10,7 @@ import LevelProgressDashboard from './pages/level-progress-dashboard';
 import ChallengeSuccess from './pages/challenge-success';
 import IdentificationChapters from './pages/identification';
 import IdentificationQuiz from './pages/identification/components/IdentificationQuiz';
+import CompeteWithFriends from './pages/compete-with-friends';
 
 const Routes = () => {
   return (
@@ -24,6 +25,7 @@ const Routes = () => {
         <Route path="/code-challenge-editor/:moduleId" element={<CodeChallengeEditor />} />
         <Route path="/identification/chapters" element={<IdentificationChapters />} />
         <Route path="/identification/quiz/:chapterId" element={<IdentificationQuiz />} />
+        <Route path="/compete-with-friends" element={<CompeteWithFriends />} />
         <Route path="/challenge-success" element={<ChallengeSuccess />} />
         <Route path="*" element={<NotFound />} />
       </RouterRoutes>
